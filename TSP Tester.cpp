@@ -66,6 +66,7 @@ vector<Coordinate> availCoor;
 vector<Coordinate> currentPath = {};
 vector<::Path> allPaths = {};
 
+//string mFILEPATH = "C:\\Users\\Austin\\source\\repos\\TSP Tester\\TSP Tester.cpp";
 
 
 int main()
@@ -85,6 +86,7 @@ int main()
 		string s(1, c);
 		int randomNumber1 = (rand() % 100) + 1;
 		int randomNumber2 = (rand() % 100) + 1;
+		cout << c << ": " << randomNumber1 << ", " << randomNumber2 << ", " << endl;
 		Coordinate CO = Coordinate(s, randomNumber1, randomNumber2);
 		availCoor.push_back(CO);
 	}
@@ -106,6 +108,7 @@ int main()
 		
 		std::cout << endl;
 	}
+
 }
 
 
