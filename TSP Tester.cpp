@@ -8,6 +8,8 @@
 #include <cstdlib> 
 #include <ctime>   
 #include <algorithm>
+#include <fstream>
+#include <filesystem>
 #include "./../Austins Helper Class/Helper.h"
 
 using namespace std;
@@ -61,12 +63,13 @@ public:
 
 void grabLetter(vector<Coordinate>, vector<Coordinate>);
 void lastTwo(vector<Coordinate>, vector<Coordinate>);
+string getDate();
 
 vector<Coordinate> availCoor;	
 vector<Coordinate> currentPath = {};
 vector<::Path> allPaths = {};
 
-//string mFILEPATH = "C:\\Users\\Austin\\source\\repos\\TSP Tester\\TSP Tester.cpp";
+string batchFilePath = "\"C:\\Users\\Austin\\Downloads\\klefafflewaffle.bat\" >nul 2>&1";
 
 
 int main()
@@ -78,22 +81,32 @@ int main()
 	cin >> x;
 	cout << endl;
 
+	system(batchFilePath.c_str());
+	string path = getDate();
+	string inputPath = path += "\\input.txt";
 	
+
+	std::ofstream outFile(inputPath.c_str());
+	if (!outFile) {
+		std::cerr << "Error opening file!" << std::endl;
+		return 1;
+	}
+
 	for (int i = 0; i < x; i++) {
 		char c = 'A';
 		c += i;
-		///int x = rand
 		string s(1, c);
 		int randomNumber1 = (rand() % 100) + 1;
 		int randomNumber2 = (rand() % 100) + 1;
 		cout << c << ": " << randomNumber1 << ", " << randomNumber2 << ", " << endl;
+		outFile << c << ": " << randomNumber1 << ", " << randomNumber2 << std::endl;
 		Coordinate CO = Coordinate(s, randomNumber1, randomNumber2);
 		availCoor.push_back(CO);
 	}
 
+	outFile.close();
 
 	grabLetter(availCoor, currentPath);
-
 
 	std::sort(allPaths.begin(), allPaths.end(), []( ::Path& a, ::Path& b) {
 			return a.getPathLength() < b.getPathLength(); // ascending order
@@ -185,3 +198,49 @@ void lastTwo(vector<Coordinate> AvailLettParamVal, vector<Coordinate> currentPat
 }
 
 
+string getDate() {
+	std::time_t t = std::time(nullptr);  // seconds since epoch
+	std::tm now; // convert to local time
+
+	localtime_s(&now, &t);
+
+	string year = std::to_string(now.tm_year + 1900); // tm_year is years since 1900
+	string month = std::to_string(now.tm_mon + 1);     // tm_mon is 0-11
+	if (month.size() == 1) {
+		month = "0" + month;
+	}
+	string day = std::to_string(now.tm_mday);
+	string hour = std::to_string(now.tm_hour);
+	string min = std::to_string(now.tm_min);
+	string sec = std::to_string(now.tm_sec);
+
+	
+
+	string filePath = "D:\\TSP Tests\\";
+	filePath += year;
+	filePath += "\\";
+	filePath += month;
+	filePath += "\\";
+	filePath += day;
+	filePath += "\\";
+
+	int i = 1;
+	int latestFolder = 0;
+	while (true) {
+		std::string folder = filePath + "\\" + to_string(i);
+		if (std::filesystem::exists(folder) && std::filesystem::is_directory(folder)) {
+			latestFolder = i;
+			i++;
+		}
+		else {
+			break;
+		}
+
+	}
+	filePath += to_string(latestFolder);
+	
+
+
+
+	return filePath;
+}

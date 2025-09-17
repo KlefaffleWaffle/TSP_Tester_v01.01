@@ -8,6 +8,10 @@ using namespace std;
 
 class Helper {
 private:
+	
+	//Called by debug message
+	static string removeLeftWhiteSpace(string& s);
+
 public:
 
 	static int displayYN();
@@ -24,7 +28,12 @@ public:
 	//static int displayChoiceVectorLarge(vector<string> list, int startPos, vector<string> alwaysShow, vector<int> overrideNumbers);
 
 	//static void pause(); - cin.ignore
+
+	static void debugMessage(string fileName, int, string message, int key);
+
 };
+
+
 
 class Coordinate {
 private:
